@@ -4,6 +4,8 @@ jobs:
     docker:
       # specify the version
       - image: circleci/golang:1.8
+        environment:
+                TERRAFORM_VERSION: 0.10.0
     working_directory: /go/src/github.com/{{ORG_NAME}}/{{REPO_NAME}}
     steps:
       - checkout
