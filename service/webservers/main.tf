@@ -1,15 +1,18 @@
-provider "aws" {
-  region = "us-east-1"
+terraform {
+  backend "s3" {
+    bucket = "oqrusk-test-terraform"
+    key    = "webservers/terraform.tfstate"
+    region = "us-east-1"
+  }
 }
 
-variable "server_port" {
-  description = "The port the server will use for HTTP requests"
-  default = 8080
+provider "aws" {
+  region = "${terraform.workspace == "test" ? "us-east-1" : "us-west-1"}"
 }
 
 resource "aws_launch_configuration" "example" {
-  image_id      = "ami-40d28157"
-  instance_type = "t2.micro"
+  image_id      = "${var.base_ami}"
+  instance_type = "${var.instance_type}"
   security_groups = ["${aws_security_group.instance.id}"]
 
   user_data = <<-EOF
@@ -101,9 +104,4 @@ resource "aws_security_group" "elb" {
 }
 
 data "aws_availability_zones" "all" {
-
-}
-
-output "elb_dns_name" {
-  value = "${aws_elb.example.dns_name}"
 }
