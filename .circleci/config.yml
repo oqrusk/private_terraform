@@ -13,6 +13,7 @@ jobs:
           name: install terraform
           command: |
             mkdir -p $HOME/.terraform
+            cd $HOME/.terraform
             curl -LO https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
             unzip -o terraform_${TERRAFORM_VERSION}_linux_amd64.zip
             sudo cp -fR ~/.terraform/* /usr/local/bin
