@@ -1,0 +1,20 @@
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version
+      - image: circleci/golang:1.8
+    working_directory: /go/src/github.com/{{ORG_NAME}}/{{REPO_NAME}}
+    steps:
+      - checkout
+      - run:
+          name: install terraform
+          command: |
+            mkdir -p $HOME/.terraform
+            curl -LO https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+            unzip -o terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+            sudo cp -fR ~/.terraform/* /usr/local/bin
+      - run:
+          name: check version
+          command: |
+            terraform --version
